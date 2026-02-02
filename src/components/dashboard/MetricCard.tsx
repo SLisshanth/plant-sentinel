@@ -12,6 +12,7 @@ interface MetricCardProps {
   progress?: number;
   className?: string;
   delay?: number;
+  visualIndicator?: ReactNode;
 }
 
 export function MetricCard({
@@ -25,6 +26,7 @@ export function MetricCard({
   progress,
   className,
   delay = 0,
+  visualIndicator,
 }: MetricCardProps) {
   const statusColors = {
     healthy: 'text-success',
@@ -61,24 +63,27 @@ export function MetricCard({
           <div className={cn('text-2xl', statusColors[status])}>
             {icon}
           </div>
-          {isLive && (
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-              <span className="text-xs text-muted-foreground uppercase tracking-wider">Live</span>
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            {visualIndicator}
+            {isLive && (
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                <span className="text-xs text-muted-foreground uppercase tracking-wider font-medium">Live</span>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="flex items-end gap-2 mb-1">
-          <span className={cn('metric-value', statusColors[status])}>
+          <span className={cn('metric-value font-mono', statusColors[status])}>
             {value}
           </span>
           {unit && (
-            <span className="text-lg text-muted-foreground mb-1">{unit}</span>
+            <span className="text-lg text-muted-foreground mb-1 font-medium">{unit}</span>
           )}
           {trend && (
             <span className={cn(
-              'text-lg mb-1',
+              'text-lg mb-1 font-bold',
               trend === 'up' ? 'text-success' : trend === 'down' ? 'text-destructive' : 'text-muted-foreground'
             )}>
               {trendIcons[trend]}
